@@ -58,10 +58,6 @@ dependencies {
     // Micrometer Prometheus
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 
-    // JPA Annotation Processors
-    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
-    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
-
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
