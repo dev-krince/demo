@@ -1,8 +1,11 @@
 package com.pcn.demo.domain.user.service
 
-import com.pcn.demo.domain.user.constant.Role
-import com.pcn.demo.domain.user.entity.LoginInfo
-import com.pcn.demo.domain.user.entity.User
+import com.pcn.demo.domain.model.user.vo.Role
+import com.pcn.demo.domain.model.user.LoginInfo
+import com.pcn.demo.domain.model.user.User
+import com.pcn.demo.domain.model.user.vo.LoginId
+import com.pcn.demo.domain.model.user.vo.Password
+import com.pcn.demo.domain.model.user.vo.Username
 import com.pcn.demo.domain.user.repository.FakeLoginInfoRepository
 import com.pcn.demo.domain.user.repository.FakeUserRepository
 import com.pcn.demo.domain.user.repository.UserRepository
@@ -40,7 +43,7 @@ internal class UserDomainServiceTest {
             @DisplayName("존재하지 않는 로그인 아이디라면 반환값 없이 종료된다.")
             fun success() {
                 //given
-                val loginId = "test"
+                val loginId = LoginId.of("test")
 
                 //when, then
                 assertDoesNotThrow { userDomainService.validateDuplicateLoginId(loginId) }
@@ -54,23 +57,21 @@ internal class UserDomainServiceTest {
             @DisplayName("중복된 로그인 아이디라면 예외를 반환한다.")
             fun fail() {
                 //given
-                val loginId = "test"
-                val user = User(
+                val loginId = LoginId.of("test")
+                val user = User.of(
                     loginId = loginId,
                     id = 1,
-                    password = "password",
-                    name = "name",
+                    password = Password.of("password"),
+                    username = Username.of("name"),
                     role = Role.ROLE_ADMIN,
-                    createdAt = LocalDateTime.now(),
-                    modifiedAt = LocalDateTime.now()
+                    createdDate = LocalDateTime.now(),
+                    modifiedDate = LocalDateTime.now()
                 )
                 userRepository.save(user)
 
                 //when, then
                 assertThrows(DuplicateResourceException::class.java) {
-                    userDomainService.validateDuplicateLoginId(
-                        loginId
-                    )
+                    userDomainService.validateDuplicateLoginId(loginId)
                 }
             }
         }
@@ -88,15 +89,15 @@ internal class UserDomainServiceTest {
             @DisplayName("존재하는 계정이라면 회원 엔티티 객체를 반환한다.")
             fun success() {
                 //given
-                val loginId = "test"
-                val user = User(
+                val loginId = LoginId.of("test")
+                val user = User.of(
                     loginId = loginId,
                     id = 1,
-                    password = "password",
-                    name = "name",
+                    password = Password.of("password"),
+                    username = Username.of("name"),
                     role = Role.ROLE_ADMIN,
-                    createdAt = LocalDateTime.now(),
-                    modifiedAt = LocalDateTime.now()
+                    createdDate = LocalDateTime.now(),
+                    modifiedDate = LocalDateTime.now()
                 )
                 userRepository.save(user)
 
@@ -115,7 +116,7 @@ internal class UserDomainServiceTest {
             @DisplayName("존재하지 않는 계정이라면 예외를 반환한다.")
             fun fail() {
                 //given
-                val loginId = "test"
+                val loginId = LoginId.of("test")
 
                 //when, then
                 assertThrows(UserNotFoundException::class.java) { userDomainService.getUserFromLoginId(loginId) }
@@ -135,11 +136,11 @@ internal class UserDomainServiceTest {
             @DisplayName("두 비밀번호가 일치한다.")
             fun success() {
                 //given
-                val rawPassword = "testPassword1!"
-                val encodedPassword = passwordEncoder.encode(rawPassword)
+                val rawPassword = Password.of("testPassword1!")
+                val encodedPassword = passwordEncoder.encode(rawPassword.value)
 
                 //when, then
-                assertDoesNotThrow { userDomainService.validatePasswordMatch(rawPassword, encodedPassword) }
+                assertDoesNotThrow { userDomainService.validatePasswordMatch(rawPassword, Password.of(encodedPassword)) }
             }
         }
 
@@ -150,12 +151,12 @@ internal class UserDomainServiceTest {
             @DisplayName("일치하지 않는 비밀번호는 예외를 반환한다.")
             fun fail() {
                 //given
-                val rawPassword = "testPassword1!"
+                val rawPassword = Password.of("password")
                 val encodedWrongPassword = passwordEncoder.encode("wrongPassword1!")
 
                 //when, then
                 assertThrows(BadCredentialsException::class.java) {
-                    userDomainService.validatePasswordMatch(rawPassword, encodedWrongPassword)
+                    userDomainService.validatePasswordMatch(rawPassword, Password.of(encodedWrongPassword))
                 }
             }
 
@@ -163,7 +164,7 @@ internal class UserDomainServiceTest {
             @DisplayName("인코딩 하지 않고 서로 같은 비밀번호 매치는 예외를 반환한다.")
             fun notEncodedPassword() {
                 //given
-                val rawPassword = "testPassword1!"
+                val rawPassword = Password.of("testPassword1!")
 
                 //when, then
                 assertThrows(BadCredentialsException::class.java) {

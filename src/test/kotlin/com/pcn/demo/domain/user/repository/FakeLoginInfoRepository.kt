@@ -1,6 +1,6 @@
 package com.pcn.demo.domain.user.repository
 
-import com.pcn.demo.domain.user.entity.LoginInfo
+import com.pcn.demo.domain.model.user.LoginInfo
 import org.springframework.data.domain.Example
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

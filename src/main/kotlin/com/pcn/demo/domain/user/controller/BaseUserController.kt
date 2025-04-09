@@ -1,7 +1,7 @@
 package com.pcn.demo.domain.user.controller
 
-import com.pcn.demo.domain.user.dto.request.LoginDto
-import com.pcn.demo.domain.user.dto.request.SignUpDto
+import com.pcn.demo.domain.model.user.dto.LoginDto
+import com.pcn.demo.domain.model.user.dto.SignUpDto
 import com.pcn.demo.global.response.ResponseCode
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content

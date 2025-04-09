@@ -1,8 +1,11 @@
 package com.pcn.demo.domain.user.repository
 
-import com.pcn.demo.domain.user.constant.Role
-import com.pcn.demo.domain.user.dto.request.SignUpDto
-import com.pcn.demo.domain.user.entity.User
+import com.pcn.demo.domain.model.user.vo.Role
+import com.pcn.demo.domain.model.user.dto.SignUpDto
+import com.pcn.demo.domain.model.user.User
+import com.pcn.demo.domain.model.user.vo.LoginId
+import com.pcn.demo.domain.model.user.vo.Password
+import com.pcn.demo.domain.model.user.vo.Username
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -17,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 @SpringBootTest
 @DisplayName("회원 레포지토리(UserRepository)")
-internal class UserRepositoryTest{
+internal class UserRepositoryTest {
 
     @Autowired
     lateinit var userRepository: UserRepository
@@ -35,20 +38,24 @@ internal class UserRepositoryTest{
             fun success() {
                 //given
                 val name = "피씨엔"
-                val signUpDto = SignUpDto(
-                    loginId = "pcn",
-                    password = "password",
-                    role = Role.ROLE_USER,
-                    name = name
+                val loginId: LoginId = LoginId.of("pcn")
+                val password: Password = Password.of("password")
+                val username: Username = Username.of(name)
+                val role: Role = Role.ROLE_USER
+                val user = User.of(
+                    loginId = loginId,
+                    password = password,
+                    username = username,
+                    role = role
                 )
-                val user = User.of(signUpDto, "testEncodedPassword")
+
                 userRepository.save(user)
 
                 //when
-                val findUser: User? = userRepository.findByUsername(name)
+                val findUser: User? = userRepository.findByUsername(username)
 
                 //then
-                assertThat(findUser!!.name).isEqualTo(name)
+                assertThat(findUser!!.username).isEqualTo(username)
             }
 
             @Test
@@ -57,17 +64,22 @@ internal class UserRepositoryTest{
                 //given
                 val name = "피씨엔"
                 val differentName = "다른피씨엔"
-                val signUpDto = SignUpDto(
-                    loginId = "pcn",
-                    password = "password",
-                    role = Role.ROLE_USER,
-                    name = differentName
-                )
-                val user = User.of(signUpDto, "testEncodedPassword")
+                val loginId: LoginId = LoginId.of("pcn")
+                val password: Password = Password.of("password")
+                val username: Username = Username.of(differentName)
+                val role: Role = Role.ROLE_USER
+
+                val user = User.of(
+                    loginId = loginId,
+                    password = password,
+                    username = username,
+                    role = role
+                    )
+
                 userRepository.save(user)
 
                 //when
-                val findUser: User? = userRepository.findByUsername(name)
+                val findUser: User? = userRepository.findByUsername(Username.of(name))
 
                 //then
                 assertThat(findUser).isNull()

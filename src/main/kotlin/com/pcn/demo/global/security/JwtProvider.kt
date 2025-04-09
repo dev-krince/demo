@@ -1,7 +1,7 @@
 package com.pcn.demo.global.security
 
-import com.pcn.demo.domain.user.constant.Role
-import com.pcn.demo.domain.user.dto.response.TokenDto
+import com.pcn.demo.domain.model.user.vo.Role
+import com.pcn.demo.domain.model.user.dto.TokenDto
 import com.pcn.demo.global.response.ExceptionResponseCode
 import io.jsonwebtoken.*
 import io.jsonwebtoken.io.Decoders

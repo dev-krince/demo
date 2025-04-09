@@ -1,8 +1,8 @@
 package com.pcn.demo.domain.user.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.pcn.demo.domain.user.constant.Role
-import com.pcn.demo.domain.user.dto.request.SignUpDto
+import com.pcn.demo.domain.model.user.vo.Role
+import com.pcn.demo.domain.model.user.dto.SignUpDto
 import com.pcn.demo.domain.user.service.UserApplicationService
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -51,7 +51,7 @@ internal class UserControllerTest{
                 val signUpDto = SignUpDto(
                     loginId = "login123",
                     name = "name",
-                    password = "password",
+                    password = "Password1!",
                     role = Role.ROLE_ADMIN
                 )
                 Mockito.doNothing().`when`(userApplicationService).signUp(signUpDto)

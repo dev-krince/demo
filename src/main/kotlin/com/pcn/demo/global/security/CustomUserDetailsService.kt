@@ -1,6 +1,7 @@
 package com.pcn.demo.global.security
 
-import com.pcn.demo.domain.user.entity.User
+import com.pcn.demo.domain.model.user.User
+import com.pcn.demo.domain.model.user.vo.Username
 import com.pcn.demo.domain.user.repository.UserRepository
 import com.pcn.demo.global.response.ExceptionResponseCode.*
 import org.springframework.security.core.userdetails.UserDetails
@@ -14,7 +15,7 @@ class CustomUserDetailsService(
 ) : UserDetailsService {
 
     override fun loadUserByUsername(username: String): UserDetails? {
-        val user = userRepository.findByUsername(username) ?: throw UsernameNotFoundException(NOT_FOUND_RESOURCE.message)
+        val user = userRepository.findByUsername(Username.of(username)) ?: throw UsernameNotFoundException(NOT_FOUND_RESOURCE.message)
 
         return CustomUserDetails(id = user.identifier, role = user.role)
     }

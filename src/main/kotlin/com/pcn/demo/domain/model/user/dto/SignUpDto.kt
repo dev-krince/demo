@@ -1,6 +1,6 @@
-package com.pcn.demo.domain.user.dto.request
+package com.pcn.demo.domain.model.user.dto
 
-import com.pcn.demo.domain.user.constant.Role
+import com.pcn.demo.domain.model.user.vo.Role
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
@@ -19,7 +19,10 @@ class SignUpDto(
     @field:Schema(title = "비밀번호", description = "8 ~ 20자 영어 소문자, 대문자, 숫자 조합", required = true, example = "TestPassword1")
     @field:NotBlank(message = "비밀번호를 입력해주세요.")
     @field:Size(min = 8, max = 20, message = "8 ~ 20자 이내여야합니다.")
-    @field:Pattern(regexp = "^(?=\\S+$).{8,20}$", message = "비밀번호는 공백 없이 8자 이상 20자 이하여야 합니다.")
+    @field:Pattern(
+        regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d!@#\$%^&*()_+=\\-{}\\[\\]:;\"'<>,.?/]{8,20}$",
+        message = "비밀번호는 영어 대소문자와 숫자를 각각 하나 이상 포함하고, 특수문자를 포함한 8~20자 이내여야 합니다."
+    )
     val password: String,
 
     @field:Schema(title = "회원명", description = "2 ~ 20 한글과 영문 조합", required = true, example = "testNickname1")

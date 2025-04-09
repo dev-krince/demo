@@ -1,4 +1,4 @@
-package com.pcn.demo.domain.user.dto.response
+package com.pcn.demo.domain.model.user.dto
 
 class TokenDto(
     val accessToken: String,

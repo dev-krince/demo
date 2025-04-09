@@ -1,6 +1,8 @@
 package com.pcn.demo.domain.user.service
 
-import com.pcn.demo.domain.user.entity.User
+import com.pcn.demo.domain.model.user.User
+import com.pcn.demo.domain.model.user.vo.LoginId
+import com.pcn.demo.domain.model.user.vo.Password
 import com.pcn.demo.domain.user.repository.LoginInfoRepository
 import com.pcn.demo.domain.user.repository.UserRepository
 import com.pcn.demo.global.exception.DuplicateResourceException
@@ -26,7 +28,7 @@ class UserDomainServiceImpl(
      * @exception DuplicateResourceException 이미 존재하는 로그인 아이디인 경우
      * @author 25.02.01 김동현
      */
-    override fun validateDuplicateLoginId(loginId: String) {
+    override fun validateDuplicateLoginId(loginId: LoginId) {
         val isDuplicateLoginId: Boolean = userRepository.existsByLoginId(loginId)
 
         if (isDuplicateLoginId) {
@@ -52,7 +54,7 @@ class UserDomainServiceImpl(
      * @return 해당 회원 로그인 아이디를 가지고 있는 회원 엔티티 객체를 반환합니다.
      * @author 25.02.01 김동현
      */
-    override fun getUserFromLoginId(loginId: String): User {
+    override fun getUserFromLoginId(loginId: LoginId): User {
         return userRepository.findByLoginId(loginId) ?: throw UserNotFoundException()
     }
 
@@ -64,8 +66,8 @@ class UserDomainServiceImpl(
      * @throws BadCredentialsException 평문 비밀번호와 인코딩 된 비밀번호가 일치하지 않음
      * @author 25.02.01 김동현
      */
-    override fun validatePasswordMatch(rawPassword: String, encodedPassword: String) {
-        val isMatches: Boolean = passwordEncoder.matches(rawPassword, encodedPassword)
+    override fun validatePasswordMatch(rawPassword: Password, encodedPassword: Password) {
+        val isMatches: Boolean = passwordEncoder.matches(rawPassword.value, encodedPassword.value)
 
         if (!isMatches) {
             throw BadCredentialsException(ExceptionResponseCode.INVALID_PASSWORD.message)

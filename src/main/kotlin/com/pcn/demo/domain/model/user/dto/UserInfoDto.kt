@@ -1,6 +1,6 @@
-package com.pcn.demo.domain.user.dto.vo
+package com.pcn.demo.domain.model.user.dto
 
-import com.pcn.demo.domain.user.constant.Role
+import com.pcn.demo.domain.model.user.vo.Role
 import java.time.LocalDateTime
 
 class UserInfoDto(

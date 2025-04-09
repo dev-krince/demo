@@ -1,9 +1,13 @@
 package com.pcn.demo.domain.user.service
 
-import com.pcn.demo.domain.user.dto.request.LoginDto
-import com.pcn.demo.domain.user.dto.request.SignUpDto
-import com.pcn.demo.domain.user.dto.response.TokenDto
-import com.pcn.demo.domain.user.entity.User
+import com.pcn.demo.domain.model.user.dto.LoginDto
+import com.pcn.demo.domain.model.user.dto.SignUpDto
+import com.pcn.demo.domain.model.user.dto.TokenDto
+import com.pcn.demo.domain.model.user.User
+import com.pcn.demo.domain.model.user.vo.LoginId
+import com.pcn.demo.domain.model.user.vo.Password
+import com.pcn.demo.domain.model.user.vo.Role
+import com.pcn.demo.domain.model.user.vo.Username
 import com.pcn.demo.global.security.JwtProvider
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -26,11 +30,20 @@ class UserApplicationServiceImpl(
      */
     @Transactional
     override fun signUp(signUpDto: SignUpDto) {
+        val username: Username = Username.of(signUpDto.name)
+        val loginId: LoginId = LoginId.of(signUpDto.loginId)
+        val role: Role = signUpDto.role
         val encodedPassword: String = passwordEncoder.encode(signUpDto.password)
-        val user = User.of(signUpDto, encodedPassword)
+        val password: Password = Password.of(encodedPassword)
+        val user = User.of(
+            loginId = loginId,
+            password = password,
+            username = username,
+            role = role
+        )
 
         userDomainService.validateRegistUserCount()
-        userDomainService.validateDuplicateLoginId(signUpDto.loginId)
+        userDomainService.validateDuplicateLoginId(loginId)
         userDomainService.resistUser(user)
     }
 
@@ -44,9 +57,11 @@ class UserApplicationServiceImpl(
      * @author 25.02.01 김동현
      */
     override fun login(loginDto: LoginDto): TokenDto {
-        val user = userDomainService.getUserFromLoginId(loginDto.loginId)
+        val loginId = LoginId.of(loginDto.loginId)
+        val user = userDomainService.getUserFromLoginId(loginId)
+        val rawPassword: Password = Password.of(loginDto.password)
 
-        userDomainService.validatePasswordMatch(loginDto.password, user.password)
+        userDomainService.validatePasswordMatch(rawPassword, user.password)
 
         return jwtProvider.generateTokenDto(user.identifier, user.role)
     }

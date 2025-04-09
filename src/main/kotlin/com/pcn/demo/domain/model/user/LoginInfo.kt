@@ -1,4 +1,4 @@
-package com.pcn.demo.domain.user.entity
+package com.pcn.demo.domain.model.user
 
 import jakarta.persistence.Column
 import jakarta.persistence.EntityListeners

@@ -1,7 +1,9 @@
 package com.pcn.demo.domain.user.repository
 
-import com.pcn.demo.domain.user.dto.vo.UserInfoDto
-import com.pcn.demo.domain.user.entity.User
+import com.pcn.demo.domain.model.user.dto.UserInfoDto
+import com.pcn.demo.domain.model.user.User
+import com.pcn.demo.domain.model.user.vo.LoginId
+import com.pcn.demo.domain.model.user.vo.Username
 import org.springframework.data.domain.Example
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -16,21 +18,21 @@ class FakeUserRepository : UserRepository {
     private val storage: MutableMap<Long, User> = HashMap()
     private val idGenerator = AtomicLong(1)
 
-    override fun existsByLoginId(loginId: String): Boolean {
+    override fun existsByLoginId(loginId: LoginId): Boolean {
         return storage.values
             .stream()
             .anyMatch { user: User -> user.loginId == loginId }
     }
 
-    override fun findByLoginId(loginId: String): User? {
+    override fun findByLoginId(loginId: LoginId): User? {
         return storage.values.find { user: User -> user.loginId == loginId }
     }
 
-    override fun findByUsername(name: String): User? {
+    override fun findByUsername(username: Username): User? {
         TODO()
     }
 
-    override fun searchUser(id: Long, loginId: String, name: String): List<User> {
+    override fun searchUser(id: Long, loginId: LoginId, username: Username): List<User> {
         TODO()
     }
 
@@ -101,14 +103,14 @@ class FakeUserRepository : UserRepository {
     override fun <S : User?> save(entity: S): S {
         val now = LocalDateTime.now()
         val id = idGenerator.get()
-        val user = User(
+        val user = User.of(
             id = idGenerator.incrementAndGet(),
             loginId = entity!!.loginId,
             password = entity.password,
-            name = entity.name,
+            username = entity.username,
             role = entity.role,
-            createdAt = now,
-            modifiedAt = now,
+            createdDate = now,
+            modifiedDate = now,
         )
 
         storage[id] = entity

@@ -1,4 +1,4 @@
-package com.pcn.demo.domain.user.dto.request
+package com.pcn.demo.domain.model.user.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank

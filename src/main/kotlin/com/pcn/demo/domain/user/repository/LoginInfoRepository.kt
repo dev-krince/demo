@@ -1,6 +1,6 @@
 package com.pcn.demo.domain.user.repository
 
-import com.pcn.demo.domain.user.entity.LoginInfo
+import com.pcn.demo.domain.model.user.LoginInfo
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

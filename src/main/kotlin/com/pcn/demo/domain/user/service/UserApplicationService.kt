@@ -1,8 +1,8 @@
 package com.pcn.demo.domain.user.service
 
-import com.pcn.demo.domain.user.dto.request.LoginDto
-import com.pcn.demo.domain.user.dto.request.SignUpDto
-import com.pcn.demo.domain.user.dto.response.TokenDto
+import com.pcn.demo.domain.model.user.dto.LoginDto
+import com.pcn.demo.domain.model.user.dto.SignUpDto
+import com.pcn.demo.domain.model.user.dto.TokenDto
 
 interface UserApplicationService {
 
